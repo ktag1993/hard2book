@@ -1,5 +1,7 @@
 name: Deploy Backend
 
+run-name: Deploy Backend to ${{ github.ref == 'refs/heads/main' && 'PROD' || 'DEV (Preview)' }}
+
 on:
   push:
     paths:
@@ -8,11 +10,12 @@ on:
       - '.github/workflows/deploy-backend.yml'
     branches:
       - main
+      - dev
   workflow_dispatch:
 
 jobs:
   deploy:
-    name: Deploy Backend
+    name: Deploy to ${{ github.ref == 'refs/heads/main' && 'PROD' || 'DEV (Preview)' }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -31,23 +34,40 @@ jobs:
         env:
           SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
         run: |
-          echo "Running migrations on Supabase..."
           if [ -d "../supabase/migrations" ] && [ "$(ls -A ../supabase/migrations/*.sql 2>/dev/null)" ]; then
-            npx supabase link --project-ref ${{ secrets.SUPABASE_PROJECT_REF }} --yes
+            if [[ "${{ github.ref }}" == "refs/heads/main" ]]; then
+              echo "Running PROD migrations..."
+              npx supabase link --project-ref ${{ secrets.SUPABASE_PROJECT_REF_PROD }} --yes
+            else
+              echo "Running DEV migrations..."
+              npx supabase link --project-ref ${{ secrets.SUPABASE_PROJECT_REF_DEV }} --yes
+            fi
             npx supabase db push --include-all --yes
             echo "Migrations complete"
           else
             echo "No migrations to run"
           fi
 
-      - name: Deploy to Vercel
+      - name: Deploy to Vercel (PROD)
+        if: github.ref == 'refs/heads/main'
         working-directory: ./backend
         env:
           VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
           VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
           VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID_BACKEND }}
         run: |
-          echo "Deploying backend to Vercel..."
+          echo "Deploying backend to PRODUCTION..."
           vercel pull --yes --environment=production --token=$VERCEL_TOKEN
           vercel deploy --prod --token=$VERCEL_TOKEN
-          echo "Backend deployment complete"
+
+      - name: Deploy to Vercel (Preview)
+        if: github.ref == 'refs/heads/dev'
+        working-directory: ./backend
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID_BACKEND }}
+        run: |
+          echo "Deploying backend to PREVIEW..."
+          vercel pull --yes --environment=preview --token=$VERCEL_TOKEN
+          vercel deploy --token=$VERCEL_TOKEN

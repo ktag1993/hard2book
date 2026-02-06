@@ -6,7 +6,9 @@ alwaysApply: true
 - website in React + Vite, mobile-optimized (website folder)
 - mobile app planned for future (React + Capacitor, mobile folder)
 - database on Supabase (PostgreSQL)
-- only 1 branch "main" will be maintained locally or on github. dont ever create any other branch unless explicitly asked
+- 2 branches: "dev" (development/preview) and "main" (production)
+- Development workflow: work on dev → test → merge to main for production
+- Merge command: `git checkout main && git merge dev && git push origin main && git checkout dev`
 - github account: ktag1993, always switch to ktag1993 before any git operations
 - always update api documentation in backend/apis.md
 - always update schema documentation in backend/schema.md
@@ -43,11 +45,18 @@ Restaurant Adapters:
 
 
 Vercel:
-- Backend project: hard2book-backend (single project, main branch only)
-- Website project: hard2book-website (single project, main branch only)
-- Deploy via GitHub Actions on push to main
-- Backend: Vercel auto-deploys from /backend on push
-- Website: Vercel auto-deploys from /website on push
+- Backend project: hard2book-backend
+  - Project ID: prj_GFeqtmVBxfT1acGVu4KRGmm2YzaB
+  - Dashboard: https://vercel.com/kartikayagarwal1993-2038s-projects/hard2book-backend
+- Website project: hard2book-website
+  - Project ID: prj_EgOom2ah4VClA4HVNkGcM042nNmA
+  - Dashboard: https://vercel.com/kartikayagarwal1993-2038s-projects/hard2book-website
+- Org ID: team_C4MpTDIOwTY6fkphUR9ZoXhA
+- Deploy via GitHub Actions:
+  - Push to dev → Vercel preview deployment
+  - Push to main → Vercel production deployment
+- Backend deploys from /backend folder
+- Website deploys from /website folder
 
 
 Supabase:
