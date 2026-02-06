@@ -1,0 +1,35 @@
+# Dependencies
+node_modules/
+
+# Environment
+.env
+.env.*
+!.env.example
+
+# Credentials - NEVER commit
+credentials.md
+
+# Build
+dist/
+build/
+.vercel/
+
+# IDE
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Supabase
+.supabase/
+
+# Logs
+*.log
+npm-debug.log*
+
+# Vercel
+.vercel
+.env*.local

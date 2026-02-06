@@ -1,0 +1,63 @@
+---
+alwaysApply: true
+---
+
+- backend in TypeScript deployed on Vercel Functions (backend folder)
+- website in React + Vite, mobile-optimized (website folder)
+- mobile app planned for future (React + Capacitor, mobile folder)
+- database on Supabase (PostgreSQL)
+- only 1 branch "main" will be maintained locally or on github. dont ever create any other branch unless explicitly asked
+- github account: ktag1993, always switch to ktag1993 before any git operations
+- always update api documentation in backend/apis.md
+- always update schema documentation in backend/schema.md
+- dont write readme or summarisation md files unless I ask you to.
+- answer briefly, dont answer in very long texts unless I ask you to.
+- use for_dump folder to create/maintain temporary files/scripts
+
+
+Product:
+- Hard2Book - Get reservations at hard-to-book restaurants
+- Snipes reservations the moment they open using direct API calls
+- Supports multiple restaurant platforms (TableCheck, Resy, OpenTable, etc.)
+- Revenue model: charge per successful booking (Rs. 500 / ~$6 per booking)
+
+Tech Stack:
+- Frontend: React + Vite (website, mobile-optimized)
+- Backend: TypeScript on Vercel Functions
+- Database: Supabase (PostgreSQL with RLS)
+- Hosting: Vercel (backend + website)
+
+Architecture:
+- /backend/api/ - Vercel serverless functions (API endpoints)
+- /backend/lib/ - Shared libraries (supabase client, types, etc.)
+- /backend/restaurants/ - Platform-specific adapters (tablecheck/, resy/, opentable/)
+- /website/ - React + Vite frontend (mobile-optimized)
+- /supabase/migrations/ - Database migrations
+- /for_dump/ - Temporary files, scripts, research docs
+
+Restaurant Adapters:
+- Each restaurant platform has its own adapter in /backend/restaurants/<platform>/
+- Each specific restaurant has a config file: /backend/restaurants/<platform>/<slug>.ts
+- Adapters implement: getAvailableSlots(), bookReservation(), confirmReservation()
+- First adapter: TableCheck (Pizza 4P's Bangalore)
+
+
+Vercel:
+- Backend project: hard2book-backend (single project, main branch only)
+- Website project: hard2book-website (single project, main branch only)
+- Deploy via GitHub Actions on push to main
+- Backend: Vercel auto-deploys from /backend on push
+- Website: Vercel auto-deploys from /website on push
+
+
+Supabase:
+- 1 project for now (will split dev/prod later if needed)
+- Migrations in /supabase/migrations/
+- Push migrations: SUPABASE_ACCESS_TOKEN=xxx npx supabase db push --project-ref <ref>
+- Credentials in credentials.md (gitignored)
+
+
+Key Tables:
+- users: id, name, email, phone, created_at
+- restaurants: id, slug, name, platform, city, country, config (jsonb), active, created_at
+- bookings: id, user_id, restaurant_id, target_date, preferred_times (text[]), party_size, status, booked_time, confirmation_code, booking_details (jsonb), payment_status, created_at, booked_at
