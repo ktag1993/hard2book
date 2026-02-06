@@ -60,10 +60,31 @@ Vercel:
 
 
 Supabase:
-- 1 project for now (will split dev/prod later if needed)
+- 2 projects, both in AP South (Mumbai)
+- Dev project ref: rfodmefvptpbdeumyyrg
+  - URL: https://rfodmefvptpbdeumyyrg.supabase.co
+- Prod project ref: ymuqzwdrevefwntjffmg
+  - URL: https://ymuqzwdrevefwntjffmg.supabase.co
 - Migrations in /supabase/migrations/
 - Push migrations: SUPABASE_ACCESS_TOKEN=xxx npx supabase db push --project-ref <ref>
 - Credentials in credentials.md (gitignored)
+
+Auth:
+- Google OAuth (Sign in with Google)
+- Supabase Auth handles the flow (Google provider enabled in Supabase dashboard)
+- Frontend uses @supabase/supabase-js for auth
+- One Google OAuth client shared for dev + prod (different redirect URIs)
+
+Frontend Design:
+- Mobile-first responsive website
+- Stack: React + Vite + Tailwind CSS
+- Auth: Google Sign-In via Supabase Auth
+- Pages:
+  - / (homepage - restaurant list with search/filters)
+  - /r/[slug] (restaurant detail + slot picker + booking form)
+  - /bookings (my bookings list with status badges)
+  - /bookings/[id] (booking detail page)
+- API base: same Vercel deployment URL (preview for dev, prod for main)
 
 
 Key Tables:
