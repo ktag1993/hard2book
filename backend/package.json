@@ -1,0 +1,19 @@
+{
+  "name": "hard2book-backend",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "vercel dev",
+    "build": "tsc",
+    "lint": "eslint . --ext .ts"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.45.0",
+    "cheerio": "^1.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.14.10",
+    "@vercel/node": "^3.2.0",
+    "typescript": "^5.5.3"
+  }
+}
